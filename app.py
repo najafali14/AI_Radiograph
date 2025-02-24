@@ -128,7 +128,7 @@ def main():
 
             # Display the uploaded image
             st.markdown("### 🖼️ Uploaded Image")
-            st.image(image, caption="Uploaded Image", use_column_width=True)
+            st.image(image, caption="Uploaded Image", use_container_width=True)
 
             # Initialize Gemini client with direct API key
             api_key = "AIzaSyAxz3kNZLBz2PH124b-pfqVuulj960QvKo"  # Direct API key
