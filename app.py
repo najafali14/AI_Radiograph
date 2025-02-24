@@ -10,7 +10,7 @@ from google.genai import types
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+st.set_page_config(page_title="AI_Radiograph")
 # Custom CSS for modern styling
 st.markdown(
     """
