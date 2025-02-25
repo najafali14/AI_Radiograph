@@ -1,0 +1,37 @@
+name: Deploy Streamlit App
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      # Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"  # Use Python 3.9 or any version compatible with your app
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Install dependencies from requirements.txt
+
+      # Set up environment variables
+      - name: Set up environment variables
+        env:
+          API_KEY: ${{ secrets.API_KEY }}  # Access the API_KEY secret
+
+      # Run the Streamlit app
+      - name: Run Streamlit app
+        run: |
+          streamlit run your_app.py  # Replace `your_app.py` with the name of your Streamlit app file
