@@ -9,7 +9,7 @@ from google.genai import types
 
 import os
 
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = os.getenv("api_key")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
