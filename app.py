@@ -82,7 +82,7 @@ st.markdown(
 def initialize_gemini_client(api_key: str) -> genai.Client:
     """Initialize and return the Gemini client."""
     try:
-        client = genai.Client(api_key=api_key)
+        client = genai.Client(api_key=GEMINI_API_KEY)
         logger.info("Gemini client initialized successfully.")
         return client
     except Exception as e:
@@ -131,7 +131,7 @@ def main():
             st.image(image, caption="Uploaded Image", use_container_width=True)
 
             # Initialize Gemini client with direct API key
-            api_key = "AIzaSyAxz3kNZLBz2PH124b-pfqVuulj960QvKo"  # Direct API key
+            # api_key = "AIzaSyAxz3kNZLBz2PH124b-pfqVuulj960QvKo"  # Direct API key
             client = initialize_gemini_client(api_key)
 
             # Generate content
