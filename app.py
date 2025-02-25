@@ -1,20 +1,16 @@
 import logging
 from typing import Optional
 import time
-
 import streamlit as st
 import PIL.Image
-from google import genai
-from google.genai import types
-
+import google.generativeai as genai
 import os
-
-api_key = os.getenv("api_key")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 st.set_page_config(page_title="AI_Radiograph")
+
 # Custom CSS for modern styling
 st.markdown(
     """
@@ -83,24 +79,21 @@ st.markdown(
 )
 
 # Initialize Gemini client
-def initialize_gemini_client(api_key: str) -> genai.Client:
-    """Initialize and return the Gemini client."""
+def initialize_gemini_client(api_key: str):
+    """Initialize the Gemini client."""
     try:
-        client = genai.Client(api_key=api_key)
+        genai.configure(api_key=api_key)  # Configure the API key
         logger.info("Gemini client initialized successfully.")
-        return client
     except Exception as e:
         logger.error(f"Failed to initialize Gemini client: {e}")
         raise
 
 # Process image and generate content
-def generate_content_from_image(client: genai.Client, image: PIL.Image.Image, prompt: str) -> Optional[str]:
+def generate_content_from_image(image: PIL.Image.Image, prompt: str) -> Optional[str]:
     """Generate content using the Gemini model based on the provided image and prompt."""
     try:
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=[prompt, image]
-        )
+        model = genai.GenerativeModel("gemini-pro-vision")  # Use the correct model
+        response = model.generate_content([prompt, image])
         logger.info("Content generated successfully.")
         return response.text
     except Exception as e:
@@ -132,11 +125,15 @@ def main():
 
             # Display the uploaded image
             st.markdown("### 🖼️ Uploaded Image")
-            st.image(image, caption="Uploaded Image", use_container_width=True)
+            st.image(image, caption="Uploaded Image", use_column_width=True)
 
-            # Initialize Gemini client with direct API key
-            # api_key = "AIzaSyAxz3kNZLBz2PH124b-pfqVuulj960QvKo"  # Direct API key
-            client = initialize_gemini_client(api_key)
+            # Initialize Gemini client
+            api_key = os.getenv("API_KEY")  # Ensure this matches the secret name in GitHub
+            if not api_key:
+                st.error("🚨 API Key is missing. Please check your environment variables.")
+                return
+
+            initialize_gemini_client(api_key)  # Pass the API key here
 
             # Generate content
             prompt = """
@@ -146,13 +143,12 @@ def main():
             Use medical terminology and provide a clear, concise, and professional response.
             """
 
-            
             with st.spinner("🔍 Analyzing image. Please wait..."):
                 progress_bar = st.progress(0)
                 for percent_complete in range(100):
                     time.sleep(0.02)  # Simulate analysis progress
                     progress_bar.progress(percent_complete + 1)
-                result = generate_content_from_image(client, image, prompt)
+                result = generate_content_from_image(image, prompt)
 
             if result:
                 st.success("✅ Analysis complete!")
