@@ -132,7 +132,7 @@ def main():
 
             # Initialize Gemini client with direct API key
             # api_key = "AIzaSyAxz3kNZLBz2PH124b-pfqVuulj960QvKo"  # Direct API key
-            client = initialize_gemini_client(api_key)
+            client = initialize_gemini_client(GEMINI_API_KEY)
 
             # Generate content
             prompt = """
