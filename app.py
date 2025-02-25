@@ -7,6 +7,10 @@ import PIL.Image
 from google import genai
 from google.genai import types
 
+import os
+
+api_key = os.getenv("GEMINI_API_KEY")
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -82,7 +86,7 @@ st.markdown(
 def initialize_gemini_client(api_key: str) -> genai.Client:
     """Initialize and return the Gemini client."""
     try:
-        client = genai.Client(api_key=GEMINI_API_KEY)
+        client = genai.Client(api_key=api_key)
         logger.info("Gemini client initialized successfully.")
         return client
     except Exception as e:
@@ -132,7 +136,7 @@ def main():
 
             # Initialize Gemini client with direct API key
             # api_key = "AIzaSyAxz3kNZLBz2PH124b-pfqVuulj960QvKo"  # Direct API key
-            client = initialize_gemini_client(GEMINI_API_KEY)
+            client = initialize_gemini_client(api_key)
 
             # Generate content
             prompt = """
